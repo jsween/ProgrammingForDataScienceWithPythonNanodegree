@@ -41,7 +41,7 @@ AS (SELECT *,
 			JOIN film f
 				ON fc.film_id = f.film_id) T1)
 
-SELECT title, name, standard_quartile,
+SELECT title, name, rental_duration, standard_quartile,
 CASE
 	WHEN standard_quartile = '1' THEN 'first quarter'
     WHEN standard_quartile = '2' THEN 'second quarter'
