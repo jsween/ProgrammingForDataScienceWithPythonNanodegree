@@ -5,6 +5,57 @@ import numpy as np
 CITY_DATA = { 'chicago': 'chicago.csv',
               'new york city': 'new_york_city.csv',
               'washington': 'washington.csv' }
+VALID_MONTHS = ['january', 'february', 'march', 'april', 'may', 'june', 'all']
+VALID_DAYS = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', ]
+
+def get_city():
+    """
+    Asks user to specify city to analyze.
+
+    Returns:
+        (str) selected_city - name of the city to analyze
+    """
+    selected_city = None
+    while selected_city not in CITY_DATA.keys():
+        selected_city = input("Please select a city: Chicago, New York City or Washington\n").lower()
+
+        if selected_city in CITY_DATA.keys():
+            return selected_city
+        else:
+            print(f"{selected_city} is not available. Please try selecting again.\n")
+
+def get_month():
+    """
+    Asks user to specify month to analyze.
+
+    Returns:
+        (str) selected_month - name of the month to filter by, or "all" to apply no month filter
+    """
+    selected_month = None
+    while selected_month not in VALID_MONTHS:
+        selected_month = input("Please select a month: January, February, March, April, May, June, or all\n").lower()
+
+        if selected_month in VALID_MONTHS:
+            return selected_month
+        else:
+            print(f"{selected_month.capitalize()} is not available. Please try selecting again.\n")
+
+def get_day_of_week():
+    """
+    Asks user to specify day to analyze.
+
+    Returns:
+        (str) selected_day - name of the day of week to filter by, or "all" to apply no day filter
+    """
+    selected_day = None
+    while selected_day not in VALID_DAYS:
+        selected_day = input("Please select a day of the week: Sunday, Monday, Tuesday, Wednesday, Thursday, Friday, Saturday, or all\n").lower()
+
+        if selected_day in VALID_MONTHS:
+            return selected_day
+        else:
+            print(f"{selected_day.capitalize()} is not available. Please try selecting again.\n")
+
 
 def get_filters():
     """
@@ -17,13 +68,13 @@ def get_filters():
     """
     print('Hello! Let\'s explore some US bikeshare data!')
     # get user input for city (chicago, new york city, washington). HINT: Use a while loop to handle invalid inputs
-
+    city = get_city()
 
     # get user input for month (all, january, february, ... , june)
-
+    month = get_month()
 
     # get user input for day of week (all, monday, tuesday, ... sunday)
-
+    day = get_day_of_week()
 
     print('-'*40)
     return city, month, day
