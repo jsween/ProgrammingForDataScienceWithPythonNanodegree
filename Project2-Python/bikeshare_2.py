@@ -5,8 +5,22 @@ import numpy as np
 CITY_DATA = { 'chicago': 'chicago.csv',
               'new york city': 'new_york_city.csv',
               'washington': 'washington.csv' }
-VALID_MONTHS = ['january', 'february', 'march', 'april', 'may', 'june', 'all']
-VALID_DAYS = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', ]
+MONTHS = { 'january': 1,
+                 'february': 2,
+                 'march': 3,
+                 'april': 4,
+                 'may': 5,
+                 'june': 6,
+                 'all': -1 }
+DAYS = { 'sunday': 0,
+        'monday': 1,
+        'tuesday': 2,
+        'wednesday': 3,
+        'thursday': 4,
+        'friday': 5,
+        'saturday': 6,
+        'all': -1 }
+
 
 def get_city():
     """
@@ -24,6 +38,7 @@ def get_city():
         else:
             print(f"{selected_city} is not available. Please try selecting again.\n")
 
+
 def get_month():
     """
     Asks user to specify month to analyze.
@@ -32,13 +47,14 @@ def get_month():
         (str) selected_month - name of the month to filter by, or "all" to apply no month filter
     """
     selected_month = None
-    while selected_month not in VALID_MONTHS:
+    while selected_month not in MONTHS.keys():
         selected_month = input("Please select a month: January, February, March, April, May, June, or all\n").lower()
 
-        if selected_month in VALID_MONTHS:
+        if selected_month in MONTHS.keys():
             return selected_month
         else:
             print(f"{selected_month.capitalize()} is not available. Please try selecting again.\n")
+
 
 def get_day_of_week():
     """
@@ -48,10 +64,10 @@ def get_day_of_week():
         (str) selected_day - name of the day of week to filter by, or "all" to apply no day filter
     """
     selected_day = None
-    while selected_day not in VALID_DAYS:
+    while selected_day not in DAYS.keys():
         selected_day = input("Please select a day of the week: Sunday, Monday, Tuesday, Wednesday, Thursday, Friday, Saturday, or all\n").lower()
 
-        if selected_day in VALID_MONTHS:
+        if selected_day in MONTHS.keys():
             return selected_day
         else:
             print(f"{selected_day.capitalize()} is not available. Please try selecting again.\n")
@@ -91,7 +107,16 @@ def load_data(city, month, day):
     Returns:
         df - Pandas DataFrame containing city data filtered by month and day
     """
+    df = pd.read_csv(f'data/{CITY_DATA[city]}')
+    df['Start Time'] = pd.to_datetime(df['Start Time'])
+    df['Month'] = df['Start Time'].dt.month
+    df['DayOfWeek'] = df['Start Time'].dt.weekday
 
+    if month != 'all':
+        df[df['Month'] == MONTHS[month]]
+    
+    if day != 'all':
+        df[df['DayOfWeek'] == DAYS[day]]
 
     return df
 
