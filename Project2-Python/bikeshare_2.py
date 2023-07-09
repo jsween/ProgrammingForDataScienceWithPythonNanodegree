@@ -69,7 +69,7 @@ def get_day_of_week():
     while selected_day not in DAYS.keys():
         selected_day = input("Please select a day of the week: Sunday, Monday, Tuesday, Wednesday, Thursday, Friday, Saturday, or all\n").lower()
 
-        if selected_day in MONTHS.keys():
+        if selected_day in DAYS.keys():
             return selected_day
         else:
             print(f"{selected_day.capitalize()} is not available. Please try selecting again.\n")
