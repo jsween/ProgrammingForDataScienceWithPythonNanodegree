@@ -2,6 +2,7 @@ import math
 import time
 import pandas as pd
 import numpy as np
+from scipy import stats
 
 CITY_DATA = { 'chicago': 'chicago.csv',
               'new york city': 'new_york_city.csv',
@@ -194,19 +195,46 @@ def trip_duration_stats(df):
     print('-'*40)
 
 
-def user_stats(df):
+def user_stats(df, city):
     """Displays statistics on bikeshare users."""
 
     print('\nCalculating User Stats...\n')
     start_time = time.time()
 
     # Display counts of user types
+    user_type = df['User Type'].values
 
+    sum_subscriber = (user_type == 'Subscriber').sum()
+    sum_customer = (user_type == 'Customer').sum()
+    sum_dependent = (user_type == 'Dependent').sum()
+
+    print(f'Total Subscriber Users: {sum_subscriber}')
+    print(f'Total Customer Users: {sum_customer}')
+    if city == 'chicago':
+        print(f'Total Dependent Users: {sum_dependent}')
 
     # Display counts of gender
-
-
     # Display earliest, most recent, and most common year of birth
+    if city != 'washington':
+        # gender
+        user_gender = df['Gender'].values
+
+        sum_male = (user_gender == 'Male').sum()
+        sum_female = (user_gender == 'Female').sum()
+
+        print(f'Total Male Users: {sum_male}')
+        print(f'Total Female Users: {sum_female}')
+
+        # birth data
+        birth_year = df['Birth Year'].values
+        cleaned_birth_year = birth_year[~np.isnan(birth_year)]
+        unique_birth_year = np.unique(cleaned_birth_year)
+        
+        print(f'Earliest Birth Year: {int(unique_birth_year.min())}')
+        print(f'Most Recent Birth Year: {int(unique_birth_year.max())}')
+        print(f'Most Common Birth Year: {int(stats.mode(cleaned_birth_year, keepdims=True)[0])}')
+    else:
+        print('\nWARNING: No Gender or Age Data available for Washington')
 
 
     print("\nThis took %s seconds." % (time.time() - start_time))
@@ -221,7 +249,7 @@ def main():
         time_stats(df, month, day)
         station_stats(df)
         trip_duration_stats(df)
-        user_stats(df)
+        user_stats(df, city)
 
         restart = input('\nWould you like to restart? Enter yes or no.\n')
         if restart.lower() != 'yes':
