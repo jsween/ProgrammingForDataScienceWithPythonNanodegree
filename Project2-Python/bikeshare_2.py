@@ -1,3 +1,4 @@
+import math
 import time
 import pandas as pd
 import numpy as np
@@ -176,10 +177,18 @@ def trip_duration_stats(df):
     start_time = time.time()
 
     # display total travel time
-
+    sum_minutes = df['Trip Duration'].sum() / 60
+    sum_hours = math.floor(sum_minutes / 60)
+    minutes = round(sum_minutes % sum_hours)
+    print(f'Total Travel Time: {sum_hours} hour(s) and {minutes} minute(s)')
 
     # display mean travel time
-
+    mean_minutes = df['Trip Duration'].mean() / 60
+    if mean_minutes >= 60:
+        mean_hours = math.floor(mean_minutes / 60)
+        print(f'Mean Travel Time: {mean_hours} hour(s) and {mean_minutes % mean_hours} minute(s)')
+    else:
+        print(f'Mean Travel Time: {round(mean_minutes, 2)} minute(s)')
 
     print("\nThis took %s seconds." % (time.time() - start_time))
     print('-'*40)
