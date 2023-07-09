@@ -110,6 +110,7 @@ def load_data(city, month, day):
         df - Pandas DataFrame containing city data filtered by month and day
     """
     df = pd.read_csv(f'data/{CITY_DATA[city]}')
+    df_copy = df.copy()
     df['Start Time'] = pd.to_datetime(df['Start Time'])
     df['Month'] = df['Start Time'].dt.month
     df['DayOfWeek'] = df['Start Time'].dt.weekday
@@ -120,7 +121,7 @@ def load_data(city, month, day):
     if day != 'all':
         df[df['DayOfWeek'] == DAYS[day]]
 
-    return df
+    return df, df_copy
 
 
 def time_stats(df, month, day):
@@ -241,15 +242,28 @@ def user_stats(df, city):
     print('-'*40)
 
 
+def display_raw_data(raw_df):
+    """
+    Displays the raw data upon the user's request
+    """
+    i = 1
+    display_data = input('\nWould you like to view the first 5 lines of raw data? Enter "y" or "n".\n').lower()
+    while display_data == 'y' or display_data == 'yes':
+        print(raw_df[i:i+5])
+        i += 5
+        display_data = input('\nWould you like to see the next 5 lines? Enter "y" or "n".\n')
+
+
 def main():
     while True:
         city, month, day = get_filters()
-        df = load_data(city, month, day)
+        df, raw_df = load_data(city, month, day)
 
         time_stats(df, month, day)
         station_stats(df)
         trip_duration_stats(df)
         user_stats(df, city)
+        display_raw_data(raw_df)
 
         restart = input('\nWould you like to restart? Enter yes or no.\n')
         if restart.lower() != 'yes':
